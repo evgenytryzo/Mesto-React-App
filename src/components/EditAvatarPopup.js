@@ -5,10 +5,10 @@ import FormSubmitButton from "./FormSubmitButton"
 const EditAvatarPopup = (props) => {
   return (
     <PopupWithForm
-      title="Обновить аватар"
-      name="avatar"
       isOpen={ props.isOpen }
       onClose={ props.onClose }
+      title="Обновить аватар"
+      name="avatar"
     >
       <FormInput
         type="url"

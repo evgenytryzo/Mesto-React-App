@@ -1,4 +1,5 @@
 const FormInput = (props) => {
+
   return (
     <>
       <input
@@ -11,7 +12,7 @@ const FormInput = (props) => {
         maxLength={ props.maxlength }
         required={ props.required }
       />
-      <span className={ `popup__error ${ props.name }-error` }></span>
+      <span className={ `popup__error` } id={`err-${props.name }`}></span>
     </>
   )
 }
