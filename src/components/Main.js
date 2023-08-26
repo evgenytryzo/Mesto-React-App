@@ -1,31 +1,35 @@
 import React from "react"
+import api from "../utils/Api"
+import Card from "./Card"
 
-const Main = () => {
+const Main = (props) => {
+
+  const [ userName, setUserName ] = React.useState(null)
+  const [ userDescription, setUserDescription ] = React.useState(null)
+  const [ userAvatar, setUserAvatar ] = React.useState(null)
+  const [ currentUser, setCurrentUser ] = React.useState(null)
+  const [ cards, setCards ] = React.useState([])
 
   React.useEffect(() => {
-
-    const handleAddPlaceClick = () => {
-      document.querySelector(".profile__add-button").addEventListener("click", () => {
-        document.querySelector(".popup_type_add").classList.add("popup_opened")
-      })
+    const fetchData = async () => {
+      try {
+        const [ userInfoRes, cardsInfoRes ] = await Promise.all([
+          api.getUser(),
+          api.getCard()
+        ])
+        setCurrentUser({
+          name: userInfoRes.name,
+          about: userInfoRes.about,
+          avatar: userInfoRes.avatar,
+          id: userInfoRes._id
+        })
+        setCards(cardsInfoRes)
+      } catch ( err ) {
+        console.log(err)
+      }
     }
-    handleAddPlaceClick()
-
-    const handleEditProfileClick = () => {
-      document.querySelector(".profile__edit-button-link").addEventListener("click", () => {
-        document.querySelector(".popup_type_edit").classList.add("popup_opened")
-      })
-    }
-    handleEditProfileClick()
-
-    const handleEditAvatarClick = () => {
-      document.querySelector(".profile__avatar-edd").addEventListener("click", () => {
-        document.querySelector(".popup_type_avatar").classList.add("popup_opened")
-      })
-    }
-    handleEditAvatarClick()
+    fetchData()
   }, [])
-
 
   return (
     <main className="content">
@@ -33,27 +37,29 @@ const Main = () => {
       <section className="profile">
 
         <div className="profile__avatar-container">
-          <button className="profile__avatar-edd"></button>
-          <img className="profile__avatar" src="#" alt="Аватар профиля"/>
+          <button onClick={ props.onEditAvatar } className="profile__avatar-edd"></button>
+          <img className="profile__avatar" src={ currentUser && currentUser.avatar } alt="Аватар профиля"/>
         </div>
-
 
         <div className="profile__info">
-
-          <h1 className="profile__name"></h1>
-
-          <button type="button" className="profile__edit-button profile__edit-button-link"></button>
-
-          <p className="profile__about"></p>
-
+          <h1 className="profile__name">{ currentUser && currentUser.name }</h1>
+          <button onClick={ props.onEditProfile } type="button"
+                  className="profile__edit-button profile__edit-button-link"></button>
+          <p className="profile__about">{ currentUser && currentUser.about }</p>
         </div>
 
-        <button type="button" className="profile__add-button"></button>
+        <button onClick={ props.onAddPlace } type="button" className="profile__add-button"></button>
 
       </section>
 
       <section className="elements">
-
+        { cards.map((card) => (
+          <div className="element" key={ card._id }>
+            <Card
+              card={ card }
+            />
+          </div>
+        )) }
       </section>
 
     </main>
