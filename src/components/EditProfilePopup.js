@@ -9,6 +9,7 @@ const EditProfilePopup = (props) => {
       onClose={ props.onClose }
       title="Редактировать профиль"
       name="edit"
+      buttonText={"Сохранить"}
     >
       <FormInput
         placeholder="Имя"
@@ -26,7 +27,6 @@ const EditProfilePopup = (props) => {
         minLength="2"
         maxLength="200"
       />
-      <FormSubmitButton text="Сохранить"/>
     </PopupWithForm>
   )
 }

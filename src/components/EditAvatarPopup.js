@@ -9,6 +9,7 @@ const EditAvatarPopup = (props) => {
       onClose={ props.onClose }
       title="Обновить аватар"
       name="avatar"
+      buttonText={"Сохранить"}
     >
       <FormInput
         type="url"
@@ -16,7 +17,6 @@ const EditAvatarPopup = (props) => {
         placeholder="Ссылка на картинку"
         required="required"
       />
-      <FormSubmitButton text="Сохранить"/>
     </PopupWithForm>
   )
 }

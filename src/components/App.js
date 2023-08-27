@@ -24,7 +24,7 @@ const App = () => {
     setIsEditProfilePopupOpen(false)
     setIsAddPlacePopupOpen(false)
     setIsEditAvatarPopupOpen(false)
-    setSelectedCard(false)
+    setSelectedCard(null)
   }
 
   return (

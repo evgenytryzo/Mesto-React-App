@@ -7,6 +7,7 @@ const AddPlacePopup = (props) => {
     <PopupWithForm
       isOpen={ props.isOpen }
       onClose={ props.onClose }
+      buttonText={"Создать"}
       title="Новое место"
       name="add"
     >
@@ -25,7 +26,6 @@ const AddPlacePopup = (props) => {
         name="card-url"
 
       />
-      <FormSubmitButton text="Создать"/>
     </PopupWithForm>
   )
 }
