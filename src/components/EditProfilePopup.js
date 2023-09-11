@@ -3,31 +3,30 @@ import FormInput from "./FormInput"
 import FormSubmitButton from "./FormSubmitButton"
 
 const EditProfilePopup = (props) => {
-
   return (
     <PopupWithForm
-      title="Редактировать профиль"
-      name="edit"
       isOpen={ props.isOpen }
       onClose={ props.onClose }
+      title="Редактировать профиль"
+      name="edit"
+      buttonText={"Сохранить"}
     >
       <FormInput
+        placeholder="Имя"
+        required="required"
         type="text"
         name="name"
-        placeholder="Your name?"
         minLength="2"
         maxLength="40"
-        required="required"
       />
       <FormInput
+        placeholder="Занятие"
+        required="required"
         type="text"
         name="about"
-        placeholder="About you?"
         minLength="2"
         maxLength="200"
-        required="required"
       />
-      <FormSubmitButton text="Сохранить"/>
     </PopupWithForm>
   )
 }

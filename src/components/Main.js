@@ -4,11 +4,9 @@ import Card from "./Card"
 
 const Main = (props) => {
 
-  const [ userName, setUserName ] = React.useState(null)
-  const [ userDescription, setUserDescription ] = React.useState(null)
-  const [ userAvatar, setUserAvatar ] = React.useState(null)
   const [ currentUser, setCurrentUser ] = React.useState(null)
   const [ cards, setCards ] = React.useState([])
+
 
   React.useEffect(() => {
     const fetchData = async () => {
@@ -25,7 +23,7 @@ const Main = (props) => {
         })
         setCards(cardsInfoRes)
       } catch ( err ) {
-        console.log(err)
+        console.error(err)
       }
     }
     fetchData()
@@ -57,6 +55,7 @@ const Main = (props) => {
           <div className="element" key={ card._id }>
             <Card
               card={ card }
+              onCardClick={ props.onCardClick }
             />
           </div>
         )) }

@@ -5,26 +5,27 @@ import FormSubmitButton from "./FormSubmitButton"
 const AddPlacePopup = (props) => {
   return (
     <PopupWithForm
-      title="Новое место"
-      name="add"
       isOpen={ props.isOpen }
       onClose={ props.onClose }
+      buttonText={"Создать"}
+      title="Новое место"
+      name="add"
     >
       <FormInput
+        placeholder="Название"
+        required="required"
         type="text"
         name="card-name"
-        placeholder="Название"
         minLength="2"
         maxLength="30"
-        required="required"
       />
       <FormInput
-        type="url"
-        name="card-url"
         placeholder="Ссылка на картинку"
         required="required"
+        type="url"
+        name="card-url"
+
       />
-      <FormSubmitButton text="Создать"/>
     </PopupWithForm>
   )
 }
