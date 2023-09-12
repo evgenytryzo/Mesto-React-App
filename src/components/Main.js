@@ -36,6 +36,7 @@ const Main = (props) => {
               onCardClick={ props.onCardClick }
               isOwn={card.owner._id}
               onCardLike={props.onCardLike}
+              onCardDelete={props.onCardDelete}
             />
           </div>
         )) }

@@ -16,10 +16,14 @@ const Card = (props) => {
     props.onCardLike(props.card)
   }
 
+  function handleDeleteClick () {
+    props.onCardDelete(props.card)
+  }
+
 
   return (
     <>
-      { isOwn && <button type="button" className="element__delete"/> }
+      { isOwn && <button type="button" onClick={handleDeleteClick} className="element__delete"/> }
       <img
         onClick={ handleClick }
         src={ props.card.link }

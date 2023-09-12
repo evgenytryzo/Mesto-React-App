@@ -1,6 +1,5 @@
 import PopupWithForm from "./PopupWithForm"
 import FormInput from "./FormInput"
-import FormSubmitButton from "./FormSubmitButton"
 
 const EditAvatarPopup = (props) => {
   return (
