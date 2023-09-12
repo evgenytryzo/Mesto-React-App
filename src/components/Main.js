@@ -1,33 +1,11 @@
-import React from "react"
+import React, { useContext } from "react"
 import api from "../utils/Api"
 import Card from "./Card"
+import { CurrentUserContext } from "./CurrentUserContext"
 
 const Main = (props) => {
 
-  const [ currentUser, setCurrentUser ] = React.useState(null)
-  const [ cards, setCards ] = React.useState([])
-
-
-  React.useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [ userInfoRes, cardsInfoRes ] = await Promise.all([
-          api.getUser(),
-          api.getCard()
-        ])
-        setCurrentUser({
-          name: userInfoRes.name,
-          about: userInfoRes.about,
-          avatar: userInfoRes.avatar,
-          id: userInfoRes._id
-        })
-        setCards(cardsInfoRes)
-      } catch ( err ) {
-        console.error(err)
-      }
-    }
-    fetchData()
-  }, [])
+  const currentUser = useContext(CurrentUserContext)
 
   return (
     <main className="content">
@@ -51,11 +29,13 @@ const Main = (props) => {
       </section>
 
       <section className="elements">
-        { cards.map((card) => (
+        { props.cards.map((card) => (
           <div className="element" key={ card._id }>
             <Card
               card={ card }
               onCardClick={ props.onCardClick }
+              isOwn={card.owner._id}
+              onCardLike={props.onCardLike}
             />
           </div>
         )) }

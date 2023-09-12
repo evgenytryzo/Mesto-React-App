@@ -1,4 +1,4 @@
-import {apiToken, apiURL, groupId} from "./constants"
+import { apiToken, apiURL, groupId } from "./constants"
 
 export class Api {
   constructor (apiToken, groupId, apiURL) {
@@ -58,6 +58,17 @@ export class Api {
       method: "DELETE",
       headers: this._headers
     }).then(this._getResponse)
+  }
+
+
+  async changeLikeCard (card, isLiked) {
+    const method = isLiked ? "PUT" : "DELETE"
+    return fetch(`${ this._url }${ this._groupId }/cards/${ card }/likes`,
+      {
+        method: method,
+        headers: this._headers
+      }
+    ).then(this._getResponse)
   }
 
   likeCard (card) {

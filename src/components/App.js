@@ -8,17 +8,21 @@ import AddPlacePopup from "./AddPlacePopup"
 import EditAvatarPopup from "./EditAvatarPopup"
 import ClosePopup from "./ClosePopup"
 import ImagePopup from "./ImagePopup"
+import api from "../utils/Api"
+import { CurrentUserContext } from "./CurrentUserContext"
 
 const App = () => {
   const [ isEditProfilePopupOpen, setIsEditProfilePopupOpen ] = React.useState(false)
   const [ isAddPlacePopupOpen, setIsAddPlacePopupOpen ] = React.useState(false)
   const [ isEditAvatarPopupOpen, setIsEditAvatarPopupOpen ] = React.useState(false)
-  const [ selectedCard, setSelectedCard] = React.useState(null)
+  const [ selectedCard, setSelectedCard ] = React.useState(null)
 
   const handleAddPlaceClick = () => setIsAddPlacePopupOpen(true)
   const handleEditProfileClick = () => setIsEditProfilePopupOpen(true)
   const handleEditAvatarClick = () => setIsEditAvatarPopupOpen(true)
   const handleCardClick = (card) => setSelectedCard(card)
+  const [ cards, setCards ] = React.useState([])
+  const [ currentUser, setCurrentUser ] = React.useState(null)
 
   const closeAllPopups = () => {
     setIsEditProfilePopupOpen(false)
@@ -27,14 +31,47 @@ const App = () => {
     setSelectedCard(null)
   }
 
+  React.useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [ userInfoRes, cardsInfoRes ] = await Promise.all([
+          api.getUser(),
+          api.getCard()
+        ])
+        setCurrentUser({
+          name: userInfoRes.name,
+          about: userInfoRes.about,
+          avatar: userInfoRes.avatar,
+          id: userInfoRes._id
+        })
+        setCards(cardsInfoRes)
+      } catch ( err ) {
+        console.error(err)
+      }
+    }
+    fetchData()
+  }, [])
+
+  const handleCardLike = async (card) => {
+    const isLiked = card.likes.some((i) => i._id === currentUser.id);
+
+    try {
+      const newCard = await api.changeLikeCard(card._id, !isLiked);
+      setCards((state) => state.map((c) => (c._id === card._id ? newCard : c)));
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
 
-      <div className="page">
-
+    <div className="page">
+      <CurrentUserContext.Provider value={ currentUser }>
         <Header/>
 
         <Main onEditProfile={ handleEditProfileClick } onAddPlace={ handleAddPlaceClick }
-              onEditAvatar={ handleEditAvatarClick } onCardClick={handleCardClick}/>
+              onEditAvatar={ handleEditAvatarClick } onCardClick={ handleCardClick } cards={ cards }
+              onCardLike={ handleCardLike }/>
 
         <Footer/>
 
@@ -46,9 +83,9 @@ const App = () => {
 
         <ClosePopup/>
 
-        <ImagePopup card={selectedCard} onClose={ closeAllPopups }/>
-      </div>
-
+        <ImagePopup card={ selectedCard } onClose={ closeAllPopups }/>
+      </CurrentUserContext.Provider>
+    </div>
 
 
   )
