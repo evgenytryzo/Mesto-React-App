@@ -4,7 +4,6 @@ import Card from "./Card"
 import { CurrentUserContext } from "./CurrentUserContext"
 
 const Main = (props) => {
-
   const currentUser = useContext(CurrentUserContext)
 
   return (

@@ -71,9 +71,35 @@ const App = () => {
       console.error(err)
     }
   }
+
+  const handleAddPlaceSubmit = async ({ name, link }) => {
+    try {
+      const newCard = await api.createCard({ name, link })
+      setCards([ newCard, ...cards ])
+      closeAllPopups()
+    } catch ( err ) {
+      console.error(err)
+    }
+  }
+
   const handleUpdateUser = async ({ name, about }) => {
     try {
       const updatedUser = await api.updateUser({ name, about })
+      setCurrentUser({
+        name: updatedUser.name,
+        about: updatedUser.about,
+        avatar: updatedUser.avatar,
+        id: updatedUser._id
+      })
+      closeAllPopups()
+    } catch ( err ) {
+      console.error(err)
+    }
+  }
+
+  const handleUpdateAvatar = async ({ avatar }) => {
+    try {
+      const updatedUser = await api.updateUserAvatar({ avatar })
       setCurrentUser({
         name: updatedUser.name,
         about: updatedUser.about,
@@ -101,9 +127,10 @@ const App = () => {
         <EditProfilePopup isOpen={ isEditProfilePopupOpen } onClose={ closeAllPopups }
                           onUpdateUser={ handleUpdateUser }/>
 
-        <AddPlacePopup isOpen={ isAddPlacePopupOpen } onClose={ closeAllPopups }/>
+        <AddPlacePopup isOpen={ isAddPlacePopupOpen } onClose={ closeAllPopups } onUpdateCard={handleAddPlaceSubmit}/>
 
-        <EditAvatarPopup isOpen={ isEditAvatarPopupOpen } onClose={ closeAllPopups }/>
+        <EditAvatarPopup isOpen={ isEditAvatarPopupOpen } onClose={ closeAllPopups }
+                         onUpdateUser={ handleUpdateAvatar }/>
 
         <ClosePopup/>
 
