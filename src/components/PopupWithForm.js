@@ -36,7 +36,7 @@ const PopupWithForm = (props) => {
 
         <h2 className="popup__name">{ props.title }</h2>
 
-        <form className={ `popup__form popup__form_${ props.name }` } name={ `${ props.name }-form` }>
+        <form className={ `popup__form popup__form_${ props.name }` } name={ `${ props.name }-form` } onSubmit={props.onSubmit}>
           { props.children }
           <FormSubmitButton buttonText={props.buttonText}/>
         </form>
