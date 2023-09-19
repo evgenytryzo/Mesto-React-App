@@ -1,4 +1,3 @@
-import "../App.css"
 import Footer from "./Footer.js"
 import Header from "./Header.js"
 import Main from "./Main.js"
@@ -12,17 +11,18 @@ import api from "../utils/Api"
 import { CurrentUserContext } from "./CurrentUserContext"
 
 const App = () => {
+  const [ currentUser, setCurrentUser ] = React.useState(null)
+  const [ selectedCard, setSelectedCard ] = React.useState(null)
+
   const [ isEditProfilePopupOpen, setIsEditProfilePopupOpen ] = React.useState(false)
   const [ isAddPlacePopupOpen, setIsAddPlacePopupOpen ] = React.useState(false)
   const [ isEditAvatarPopupOpen, setIsEditAvatarPopupOpen ] = React.useState(false)
-  const [ selectedCard, setSelectedCard ] = React.useState(null)
 
   const handleAddPlaceClick = () => setIsAddPlacePopupOpen(true)
   const handleEditProfileClick = () => setIsEditProfilePopupOpen(true)
   const handleEditAvatarClick = () => setIsEditAvatarPopupOpen(true)
   const handleCardClick = (card) => setSelectedCard(card)
   const [ cards, setCards ] = React.useState([])
-  const [ currentUser, setCurrentUser ] = React.useState(null)
 
   const closeAllPopups = () => {
     setIsEditProfilePopupOpen(false)

@@ -52,6 +52,7 @@ const EditProfilePopup = (props) => {
         minLength="2"
         maxLength="40"
         onChange={ handleNameChange }
+        value={ name }
       />
       <FormInput
         placeholder="Занятие"
@@ -61,6 +62,7 @@ const EditProfilePopup = (props) => {
         minLength="2"
         maxLength="200"
         onChange={ handleAboutChange }
+        value={ description }
       />
     </PopupWithForm>
   )
