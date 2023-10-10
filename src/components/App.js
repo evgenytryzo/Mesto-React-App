@@ -1,7 +1,7 @@
 import Footer from "./Footer.js"
 import Header from "./Header.js"
 import Main from "./Main.js"
-import React from "react"
+import React, { useEffect } from "react"
 import EditProfilePopup from "./EditProfilePopup"
 import AddPlacePopup from "./AddPlacePopup"
 import EditAvatarPopup from "./EditAvatarPopup"
@@ -9,6 +9,9 @@ import ClosePopup from "./ClosePopup"
 import ImagePopup from "./ImagePopup"
 import api from "../utils/Api"
 import { CurrentUserContext } from "./CurrentUserContext"
+import { Routes, Route, Navigate } from "react-router-dom"
+import ProtectedRoute from "./ProtectedRoute.js"
+import Login from "./Login.js"
 
 const App = () => {
   const [ currentUser, setCurrentUser ] = React.useState(null)
@@ -112,34 +115,57 @@ const App = () => {
     }
   }
 
-  return (
-
-    <div className="page">
-      <CurrentUserContext.Provider value={ currentUser }>
-        <Header/>
-
-        <Main onEditProfile={ handleEditProfileClick } onAddPlace={ handleAddPlaceClick }
-              onEditAvatar={ handleEditAvatarClick } onCardClick={ handleCardClick }
-              cards={ cards } onCardLike={ handleCardLike } onCardDelete={ handleCardDelete }/>
-
-        <Footer/>
-
-        <EditProfilePopup isOpen={ isEditProfilePopupOpen } onClose={ closeAllPopups }
-                          onUpdateUser={ handleUpdateUser }/>
-
-        <AddPlacePopup isOpen={ isAddPlacePopupOpen } onClose={ closeAllPopups } onUpdateCard={handleAddPlaceSubmit}/>
-
-        <EditAvatarPopup isOpen={ isEditAvatarPopupOpen } onClose={ closeAllPopups }
-                         onUpdateUser={ handleUpdateAvatar }/>
-
-        <ClosePopup/>
-
-        <ImagePopup card={ selectedCard } onClose={ closeAllPopups }/>
-      </CurrentUserContext.Provider>
-    </div>
+  const loggedIn = false
 
 
-  )
+return (
+	<div className='page'>
+		<CurrentUserContext.Provider value={currentUser}>
+			<Routes>
+				<Route path='/sign-up' />
+				<Route path='/sign-in' element={<Login/>} />
+				<Route
+					path='/'
+					element={
+						<ProtectedRoute
+							component={Main}
+							onEditProfile={handleEditProfileClick}
+							onAddPlace={handleAddPlaceClick}
+							onEditAvatar={handleEditAvatarClick}
+							onCardClick={handleCardClick}
+							cards={cards}
+							onCardLike={handleCardLike}
+							onCardDelete={handleCardDelete}
+						/>
+					}
+				/>
+
+			</Routes>
+
+			<EditProfilePopup
+				isOpen={isEditProfilePopupOpen}
+				onClose={closeAllPopups}
+				onUpdateUser={handleUpdateUser}
+			/>
+
+			<AddPlacePopup
+				isOpen={isAddPlacePopupOpen}
+				onClose={closeAllPopups}
+				onUpdateCard={handleAddPlaceSubmit}
+			/>
+
+			<EditAvatarPopup
+				isOpen={isEditAvatarPopupOpen}
+				onClose={closeAllPopups}
+				onUpdateUser={handleUpdateAvatar}
+			/>
+
+			<ClosePopup />
+
+			<ImagePopup card={selectedCard} onClose={closeAllPopups} />
+		</CurrentUserContext.Provider>
+	</div>
+)
 }
 
 export default App

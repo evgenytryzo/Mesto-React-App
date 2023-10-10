@@ -1,7 +1,7 @@
 const FormSubmitButton = (props) => {
 
   return (
-    <button type="submit" className="popup__submit-btn">
+    <button type="submit" className="submit-button">
       { props.buttonText }
     </button>
   )
