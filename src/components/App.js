@@ -12,6 +12,8 @@ import { CurrentUserContext } from "./CurrentUserContext"
 import { Routes, Route, Navigate } from "react-router-dom"
 import ProtectedRoute from "./ProtectedRoute.js"
 import Login from "./Login.js"
+import Register from "./Register.js"
+import InfoTooltip from "./InfoTooltip.js"
 
 const App = () => {
   const [ currentUser, setCurrentUser ] = React.useState(null)
@@ -20,17 +22,21 @@ const App = () => {
   const [ isEditProfilePopupOpen, setIsEditProfilePopupOpen ] = React.useState(false)
   const [ isAddPlacePopupOpen, setIsAddPlacePopupOpen ] = React.useState(false)
   const [ isEditAvatarPopupOpen, setIsEditAvatarPopupOpen ] = React.useState(false)
+  const [isInfoTooltip, setIsInfoTooltip] = React.useState(false)
 
   const handleAddPlaceClick = () => setIsAddPlacePopupOpen(true)
   const handleEditProfileClick = () => setIsEditProfilePopupOpen(true)
   const handleEditAvatarClick = () => setIsEditAvatarPopupOpen(true)
+  const handleInfoTooltip = () => setIsInfoTooltip(true)
   const handleCardClick = (card) => setSelectedCard(card)
+
   const [ cards, setCards ] = React.useState([])
 
   const closeAllPopups = () => {
     setIsEditProfilePopupOpen(false)
     setIsAddPlacePopupOpen(false)
     setIsEditAvatarPopupOpen(false)
+    setIsInfoTooltip(false)
     setSelectedCard(null)
   }
 
@@ -122,8 +128,20 @@ return (
 	<div className='page'>
 		<CurrentUserContext.Provider value={currentUser}>
 			<Routes>
-				<Route path='/sign-up' />
-				<Route path='/sign-in' element={<Login/>} />
+				<Route
+					path='/sing-in'
+					element={
+						<Login
+							onClosePopup={closeAllPopups}
+							handleInfo={handleInfoTooltip}
+						/>
+					}
+				/>
+				<Route
+					path='/sign-up'
+					element={<Register onClosePopup={closeAllPopups} />}
+				/>
+
 				<Route
 					path='/'
 					element={
@@ -139,8 +157,15 @@ return (
 						/>
 					}
 				/>
-
+				<Route
+					path='*'
+					element={
+						loggedIn ? <Navigate to='/ducks' /> : <Navigate to='/sing-in' />
+					}
+				/>
 			</Routes>
+
+			<InfoTooltip onClose={closeAllPopups} isOpen={isInfoTooltip} />
 
 			<EditProfilePopup
 				isOpen={isEditProfilePopupOpen}

@@ -34,12 +34,14 @@ const PopupWithForm = (props) => {
 
         <button type="button" className="popup__close" onClick={ props.onClose }/>
 
+      { props.icon && <div>{props.icon}</div>}
+
         <h2 className="popup__name">{ props.title }</h2>
 
-        <form className={ `popup__form popup__form_${ props.name }` } name={ `${ props.name }-form` } onSubmit={props.onSubmit}>
+        {props.onSubmit && <form className={ `popup__form popup__form_${ props.name }` } name={ `${ props.name }-form` } onSubmit={props.onSubmit}>
           { props.children }
           <FormSubmitButton buttonText={props.buttonText}/>
-        </form>
+        </form>}
       </div>
     </div>
   )
