@@ -10,7 +10,6 @@ const Login = (props) => {
   const handleSubmit = e => {
 		e.preventDefault()
 	}
-
 	
 	return (
 		<>
@@ -39,7 +38,7 @@ const Login = (props) => {
 						<button
 							type='submit'
 							className='login__button'
-							onClick={props.handleInfo}
+							
 						>
 							Войти
 						</button>

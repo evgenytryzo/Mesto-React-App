@@ -22,15 +22,20 @@ const App = () => {
   const [ isEditProfilePopupOpen, setIsEditProfilePopupOpen ] = React.useState(false)
   const [ isAddPlacePopupOpen, setIsAddPlacePopupOpen ] = React.useState(false)
   const [ isEditAvatarPopupOpen, setIsEditAvatarPopupOpen ] = React.useState(false)
-  const [isInfoTooltip, setIsInfoTooltip] = React.useState(false)
 
   const handleAddPlaceClick = () => setIsAddPlacePopupOpen(true)
   const handleEditProfileClick = () => setIsEditProfilePopupOpen(true)
   const handleEditAvatarClick = () => setIsEditAvatarPopupOpen(true)
-  const handleInfoTooltip = () => setIsInfoTooltip(true)
   const handleCardClick = (card) => setSelectedCard(card)
 
   const [ cards, setCards ] = React.useState([])
+
+  const [isInfoTooltip, setIsInfoTooltip] = React.useState(false)
+  const [isValidateInfoTooltip, setIsValidateInfoTooltip] = React.useState(true)
+  const handleInfoTooltip = () => setIsInfoTooltip(true)
+  
+
+
 
   const closeAllPopups = () => {
     setIsEditProfilePopupOpen(false)
@@ -40,12 +45,15 @@ const App = () => {
     setSelectedCard(null)
   }
 
+  const [test, setTest] = React.useState(null)
+
   React.useEffect(() => {
     const fetchData = async () => {
       try {
-        const [ userInfoRes, cardsInfoRes ] = await Promise.all([
+        const [ userInfoRes, cardsInfoRes, login ] = await Promise.all([
           api.getUser(),
-          api.getCard()
+          api.getCard(),
+          api.getLogin()
         ])
         setCurrentUser({
           name: userInfoRes.name,
@@ -54,6 +62,8 @@ const App = () => {
           id: userInfoRes._id
         })
         setCards(cardsInfoRes)
+        setTest(login)
+        console.log(login, test)
       } catch ( err ) {
         console.error(err)
       }
@@ -130,16 +140,17 @@ return (
 			<Routes>
 				<Route
 					path='/sing-in'
-					element={
-						<Login
-							onClosePopup={closeAllPopups}
-							handleInfo={handleInfoTooltip}
-						/>
-					}
+					element={<Login onClosePopup={closeAllPopups} />}
 				/>
 				<Route
 					path='/sign-up'
-					element={<Register onClosePopup={closeAllPopups} />}
+					element={
+						<Register
+							handleInfo={handleInfoTooltip}
+							onClosePopup={closeAllPopups}
+							handleTextInfoTooltip={setIsValidateInfoTooltip}
+						/>
+					}
 				/>
 
 				<Route
@@ -165,7 +176,11 @@ return (
 				/>
 			</Routes>
 
-			<InfoTooltip onClose={closeAllPopups} isOpen={isInfoTooltip} />
+			<InfoTooltip
+				onClose={closeAllPopups}
+				isOpen={isInfoTooltip}
+				isValidateInfoTooltip={isValidateInfoTooltip}
+			/>
 
 			<EditProfilePopup
 				isOpen={isEditProfilePopupOpen}
