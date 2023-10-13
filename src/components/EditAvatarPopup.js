@@ -15,7 +15,6 @@ const EditAvatarPopup = (props) => {
     props.onUpdateUser({
       avatar: avatarRef.current.value
     })
-    console.log(avatarRef.current.value)
   }
   return (
     <PopupWithForm

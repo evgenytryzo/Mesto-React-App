@@ -1,6 +1,6 @@
 .header {
     padding: 45px 0 0 0;
-    margin: 0 auto 36px auto;
+    margin: 0 auto;
     display: flex;
     flex-direction: column;
     max-width: 880px;

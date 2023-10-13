@@ -1,5 +1,6 @@
 import React from "react"
-import FormSubmitButton from "./FormSubmitButton";
+import FormSubmitButton from "./FormSubmitButton"
+import registerIcon from '../images/registerIcon.svg'
 
 const PopupWithForm = (props) => {
 
@@ -27,22 +28,36 @@ const PopupWithForm = (props) => {
 
 
   return (
-    <div onMouseDown={ handleOverlayClick }
-         className={ `popup popup_type_${ props.name } ${ props.isOpen ? "popup_opened" : "" }` }>
+		<div
+			onMouseDown={handleOverlayClick}
+			className={`popup popup_type_${props.name} ${
+				props.isOpen ? 'popup_opened' : ''
+			}`}
+		>
+			<div className={`popup__container popup__container_type_${props.name}`}>
+				<button
+					type='button'
+					className='popup__close'
+					onClick={props.onClose}
+				/>
 
-      <div className={ `popup__container popup__container_type_${ props.name }` }>
+				{props.icon && <img src={props.icon} alt='props.title'></img>}
 
-        <button type="button" className="popup__close" onClick={ props.onClose }/>
+				<h2 className='popup__name'>{props.title}</h2>
 
-        <h2 className="popup__name">{ props.title }</h2>
-
-        <form className={ `popup__form popup__form_${ props.name }` } name={ `${ props.name }-form` } onSubmit={props.onSubmit}>
-          { props.children }
-          <FormSubmitButton buttonText={props.buttonText}/>
-        </form>
-      </div>
-    </div>
-  )
+				{!props.icon && (
+					<form
+						className={`popup__form popup__form_${props.name}`}
+						name={`${props.name}-form`}
+						onSubmit={props.onSubmit}
+					>
+						{props.children}
+						<FormSubmitButton buttonText={props.buttonText} />
+					</form>
+				)}
+			</div>
+		</div>
+	)
 }
 
 export default PopupWithForm
