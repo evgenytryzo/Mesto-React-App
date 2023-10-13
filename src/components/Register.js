@@ -5,29 +5,32 @@ import Auth from "./Auth"
 
 const Register = (props) => {
 	  const [formValue, setFormValue] = useState({
-			email: 'evgenytryzo@yandex.ru',
-			password: '260202FaFa987655',
+			email: 'f0011@inbox.ru',
+			password: '260202ff',
 		})
+
+		const endpointRegister = '/signup'
 
 		const handleChange = e => {
 			const { name, value } = e.target
-
 			setFormValue({
 				...formValue,
 				[name]: value,
 			})
-
 		}
+
 const handleSubmit = e => {
 	e.preventDefault()
 	const { password, email } = formValue
-	console.log(JSON.stringify({ password, email }))
-	Auth(password, email)
-		.then(data => console.log(data))
+	Auth(password, email, endpointRegister)
+		.then(data => {
+			props.handleTextInfoTooltip(true)}
+			)
 		.catch(error => {
 			console.error(`Ошибка: ${error.message}`)
 			console.error(`Status: ${error.status}`)
 			console.error(error)
+			props.handleTextInfoTooltip(false)
 		})
 }
 

@@ -7,7 +7,6 @@ const InfoTooltip = (props) => {
 	const textValidate = 'Вы успешно зарегистрировались!'
 	const textNotValidate = 'Что-то пошло не так! Попробуйте ещё раз.'
 
-	console.log(props)
 	return (
 		<PopupWithForm
 			isOpen={props.isOpen}

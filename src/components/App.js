@@ -33,10 +33,7 @@ const App = () => {
   const [isInfoTooltip, setIsInfoTooltip] = React.useState(false)
   const [isValidateInfoTooltip, setIsValidateInfoTooltip] = React.useState(true)
   const handleInfoTooltip = () => setIsInfoTooltip(true)
-  
-
-
-
+  const [loggedIn, setLoggedIn] = React.useState(false)
   const closeAllPopups = () => {
     setIsEditProfilePopupOpen(false)
     setIsAddPlacePopupOpen(false)
@@ -45,15 +42,14 @@ const App = () => {
     setSelectedCard(null)
   }
 
-  const [test, setTest] = React.useState(null)
+
 
   React.useEffect(() => {
     const fetchData = async () => {
       try {
-        const [ userInfoRes, cardsInfoRes, login ] = await Promise.all([
+        const [ userInfoRes, cardsInfoRes ] = await Promise.all([
           api.getUser(),
-          api.getCard(),
-          api.getLogin()
+          api.getCard()
         ])
         setCurrentUser({
           name: userInfoRes.name,
@@ -62,8 +58,6 @@ const App = () => {
           id: userInfoRes._id
         })
         setCards(cardsInfoRes)
-        setTest(login)
-        console.log(login, test)
       } catch ( err ) {
         console.error(err)
       }
@@ -131,16 +125,19 @@ const App = () => {
     }
   }
 
-  const loggedIn = false
-
-
 return (
 	<div className='page'>
 		<CurrentUserContext.Provider value={currentUser}>
 			<Routes>
 				<Route
 					path='/sing-in'
-					element={<Login onClosePopup={closeAllPopups} />}
+					element={
+						<Login
+							onClosePopup={closeAllPopups}
+							onLoggedIn={setLoggedIn}
+							loggedIn={loggedIn}
+						/>
+					}
 				/>
 				<Route
 					path='/sign-up'
@@ -157,6 +154,7 @@ return (
 					path='/'
 					element={
 						<ProtectedRoute
+							loggedIn={loggedIn}
 							component={Main}
 							onEditProfile={handleEditProfileClick}
 							onAddPlace={handleAddPlaceClick}
@@ -170,9 +168,7 @@ return (
 				/>
 				<Route
 					path='*'
-					element={
-						loggedIn ? <Navigate to='/ducks' /> : <Navigate to='/sing-in' />
-					}
+					element={loggedIn ? <Navigate to='/' /> : <Navigate to='/sing-in' />}
 				/>
 			</Routes>
 
