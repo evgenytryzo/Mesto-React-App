@@ -1,33 +1,29 @@
-import React from "react"
-import FormSubmitButton from "./FormSubmitButton"
-import registerIcon from '../images/registerIcon.svg'
+import React from 'react'
+import FormSubmitButton from './FormSubmitButton'
 
-const PopupWithForm = (props) => {
+const PopupWithForm = props => {
+	const handleOverlayClick = e => {
+		if (e.target === e.currentTarget) {
+			props.onClose()
+		}
+	}
+	React.useEffect(() => {
+		const handleEscKeyClose = e => {
+			if (e.key === 'Escape') {
+				props.onClose()
+			}
+		}
 
-  const handleOverlayClick = (e) => {
-    if ( e.target === e.currentTarget ) {
-      props.onClose()
-    }
-  }
-  React.useEffect(() => {
-    const handleEscKeyClose = (e) => {
-      if ( e.key === "Escape" ) {
-        props.onClose()
-      }
-    }
+		if (props.isOpen) {
+			document.addEventListener('keydown', handleEscKeyClose)
+		}
 
-    if ( props.isOpen ) {
-      document.addEventListener("keydown", handleEscKeyClose)
-    }
+		return () => {
+			document.removeEventListener('keydown', handleEscKeyClose)
+		}
+	}, [props.isOpen])
 
-    return () => {
-      document.removeEventListener("keydown", handleEscKeyClose)
-    }
-  }, [ props.isOpen ])
-
-
-
-  return (
+	return (
 		<div
 			onMouseDown={handleOverlayClick}
 			className={`popup popup_type_${props.name} ${
@@ -41,7 +37,13 @@ const PopupWithForm = (props) => {
 					onClick={props.onClose}
 				/>
 
-				{props.icon && <img src={props.icon} alt='props.title'></img>}
+				{props.icon && (
+					<img
+						className='popup__image-infoTooltip'
+						src={props.icon}
+						alt='props.title'
+					></img>
+				)}
 
 				<h2 className='popup__name'>{props.title}</h2>
 

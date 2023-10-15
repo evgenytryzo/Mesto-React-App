@@ -1,38 +1,43 @@
-import Header from "./Header"
-import Footer from "./Footer"
-import { useState } from "react"
-import Auth from "./Auth"
+import Header from './Header'
+import Footer from './Footer'
+import { useState } from 'react'
+import Auth from './Auth'
+import { useNavigate } from 'react-router-dom'
 
-const Register = (props) => {
-	  const [formValue, setFormValue] = useState({
-			email: 'f0011@inbox.ru',
-			password: '260202ff',
+const Register = props => {
+	const navigate = useNavigate()
+	const [formValue, setFormValue] = useState({
+		email: '',
+		password: '',
+	})
+
+	const endpointRegister = '/signup'
+
+	const handleChange = e => {
+		const { name, value } = e.target
+		setFormValue({
+			...formValue,
+			[name]: value,
 		})
+	}
 
-		const endpointRegister = '/signup'
-
-		const handleChange = e => {
-			const { name, value } = e.target
-			setFormValue({
-				...formValue,
-				[name]: value,
+	const handleSubmit = e => {
+		e.preventDefault()
+		const { password, email } = formValue
+		Auth(password, email, endpointRegister)
+			.then(data => {
+				props.handleInfo()
+				props.handleTextInfoTooltip(true)
+				navigate('/sign-in', { replace: true })
 			})
-		}
-
-const handleSubmit = e => {
-	e.preventDefault()
-	const { password, email } = formValue
-	Auth(password, email, endpointRegister)
-		.then(data => {
-			props.handleTextInfoTooltip(true)}
-			)
-		.catch(error => {
-			console.error(`Ошибка: ${error.message}`)
-			console.error(`Status: ${error.status}`)
-			console.error(error)
-			props.handleTextInfoTooltip(false)
-		})
-}
+			.catch(error => {
+				console.error(`Ошибка: ${error.message}`)
+				console.error(`Status: ${error.status}`)
+				console.error(error)
+				props.handleInfo()
+				props.handleTextInfoTooltip(false)
+			})
+	}
 
 	return (
 		<section className='login-container'>
@@ -56,15 +61,11 @@ const handleSubmit = e => {
 						id='password'
 						required
 						name='password'
-						type='text'
+						type='password'
 						value={formValue.password}
 						onChange={handleChange}
 					/>
-					<button
-						type='submit'
-						className='login__button'
-						onClick={props.handleInfo}
-					>
+					<button type='submit' className='login__button'>
 						Войти
 					</button>
 				</form>

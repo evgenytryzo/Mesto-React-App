@@ -1,75 +1,72 @@
-import Footer from "./Footer"
-import Header from "./Header"
-import { useEffect, useState } from "react"
-import Auth from "./Auth"
-import { Navigate } from "react-router-dom"
-const Login = (props) => {
-const [formValue, setFormValue] = useState({
-			email: 'f0011@inbox.ru',
-			password: '260202ff',
-		})
-		const endpointRegister = '/signin'
-
-		const handleChange = e => {
-					const { name, value } = e.target
-					setFormValue({
-						...formValue,
-						[name]: value,
-					})
-				}
-
-
-				useEffect(() => {
-					const token = localStorage.getItem("token")
-					
-					if (token) {checkValidityUser(token).then((res) => {
-						if (res) {
-							props.onLoggedIn(true)
-							Navigate('/', { replace: true })
-						}
-					})
-
-					}
-				}, [])
-
-const checkValidityUser = token => {
-	const BASE_URL = 'https://auth.nomoreparties.co'
-	return fetch(`${BASE_URL}/users/me`, {
-		method: 'GET',
-		headers: {
-			Accept: 'application/json',
-			'Content-Type': 'application/json',
-			Authorization: `Bearer ${token}`,
-		},
+import Footer from './Footer'
+import Header from './Header'
+import { useEffect, useState } from 'react'
+import Auth from './Auth'
+import { Navigate } from 'react-router-dom'
+const Login = props => {
+	const [formValue, setFormValue] = useState({
+		email: '',
+		password: '',
 	})
-		.then(res => res.json())
-		.then(data => console.log(data))
-		.then(props.onLoggedIn(true))
-		.then(localStorage.setItem('token', token))
-		.catch(error => {
-			console.error(`Ошибка: ${error.message}`)
-			console.error(`Status: ${error.status}`)
-			console.error(error)
-		})
-}
-	
+	const endpointRegister = '/signin'
 
-const handleSubmit = e => {
-	e.preventDefault()
-	const { password, email } = formValue
-	console.log(JSON.stringify({ password, email, endpointRegister }))
-	Auth(password, email, endpointRegister)
-		.then(data => checkValidityUser(data.token))
-		.catch(error => {
-			console.error(`Ошибка: ${error.message}`)
-			console.error(`Status: ${error.status}`)
-			console.error(error)
+	const handleChange = e => {
+		const { name, value } = e.target
+		setFormValue({
+			...formValue,
+			[name]: value,
 		})
-}
+	}
+
+	useEffect(() => {
+		const token = localStorage.getItem('token')
+
+		if (token) {
+			checkValidityUser(token).then(res => {
+				if (res) {
+					props.onLoggedIn(true)
+					Navigate('/', { replace: true })
+				}
+			})
+		}
+	}, [])
+
+	const checkValidityUser = token => {
+		const BASE_URL = 'https://auth.nomoreparties.co'
+		return fetch(`${BASE_URL}/users/me`, {
+			method: 'GET',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${token}`,
+			},
+		})
+			.then(res => res.json())
+			.then(data => props.setCurrentEmail({ email: data.data.email }))
+			.then(props.onLoggedIn(true))
+			.then(localStorage.setItem('token', token))
+			.catch(error => {
+				console.error(`Ошибка: ${error.message}`)
+				console.error(`Status: ${error.status}`)
+				console.error(error)
+			})
+	}
+
+	const handleSubmit = e => {
+		e.preventDefault()
+		const { password, email } = formValue
+		Auth(password, email, endpointRegister)
+			.then(data => checkValidityUser(data.token))
+			.catch(error => {
+				console.error(`Ошибка: ${error.message}`)
+				console.error(`Status: ${error.status}`)
+				console.error(error)
+			})
+	}
 
 	return (
 		<>
-			{props.loggedIn ? <Navigate to='/' /> : <Navigate to='/sing-in' />}
+			{props.loggedIn ? <Navigate to='/' /> : <Navigate to='/sign-in' />}
 			<section className='login-container'>
 				<Header link='/sign-up' text='Регистрация' />
 				<div className='login'>
@@ -91,7 +88,7 @@ const handleSubmit = e => {
 							id='password'
 							required
 							name='password'
-							type='text'
+							type='password'
 							value={formValue.password}
 							onChange={handleChange}
 						/>
